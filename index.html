@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập – Trường ĐH Sư phạm TP. HCM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a3f6f;
+      --navy-dark: #12305a;
+      --navy-light: #2a5fa0;
+      --red: #cc2222;
+      --gray-bg: #e8ecf0;
+      --gray-border: #d0d5dd;
+      --gray-text: #666;
+      --gray-hint: #aaa;
+      --white: #ffffff;
+      --error-bg: #fff0f0;
+      --error-border: #fca5a5;
+      --error-text: #b91c1c;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--gray-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 18px;
+      border-top: 5px solid var(--navy);
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo */
+    .logo-wrap { margin-bottom: 1.4rem; }
+    .logo-wrap svg { width: 140px; height: auto; display: block; }
+
+    /* School name */
+    .school-name {
+      text-align: center;
+      font-weight: 700;
+      font-size: 16.5px;
+      color: var(--navy);
+      letter-spacing: 0.03em;
+      line-height: 1.45;
+      margin-bottom: 0.45rem;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 13.5px;
+      color: var(--gray-text);
+      margin-bottom: 1.8rem;
+      text-align: center;
+    }
+
+    /* Error message */
+    .error-msg {
+      width: 100%;
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--error-text);
+      margin-bottom: 0.9rem;
+      display: none;
+    }
+
+    /* Inputs */
+    .form-group {
+      width: 100%;
+      margin-bottom: 0.95rem;
+      position: relative;
+    }
+
+    .form-group input {
+      width: 100%;
+      border: 1.5px solid var(--gray-border);
+      border-radius: 9px;
+      padding: 13px 44px 13px 16px;
+      font-size: 15px;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      color: #333;
+      outline: none;
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input::placeholder { color: var(--gray-hint); }
+
+    .form-group input:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(26, 63, 111, 0.12);
+    }
+
+    .eye-btn {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-hint);
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      transition: color 0.15s;
+    }
+    .eye-btn:hover { color: #555; }
+
+    /* Login button */
+    .btn-login {
+      width: 100%;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 9px;
+      padding: 14px;
+      font-size: 15.5px;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.4rem;
+      margin-bottom: 1.6rem;
+      letter-spacing: 0.06em;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-login:hover { background: var(--navy-dark); }
+    .btn-login:active { transform: scale(0.98); }
+
+    /* Footer links */
+    .footer-links {
+      font-size: 14px;
+      color: var(--gray-text);
+      text-align: center;
+      line-height: 2.1;
+    }
+    .footer-links a {
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .footer-links a:hover { text-decoration: underline; }
+
+    /* Copyright */
+    .copyright {
+      margin-top: 1.6rem;
+      font-size: 13px;
+      color: #999;
+      text-align: center;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background: var(--navy);
+      color: var(--white);
+      padding: 12px 26px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 2rem 1.25rem 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Logo SVG -->
+    <div class="logo-wrap">
+      <svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Blue book/shield left block -->
+        <rect x="18" y="8" width="108" height="82" rx="7" fill="#1a3f6f"/>
+        <rect x="23" y="13" width="98" height="72" rx="5" fill="#ffffff"/>
+        <!-- Atom icon top-left inside white -->
+        <circle cx="42" cy="42" r="12" fill="none" stroke="#cc2222" stroke-width="1.8"/>
+        <ellipse cx="42" cy="42" rx="12" ry="5" fill="none" stroke="#cc2222" stroke-width="1.2" transform="rotate(60 42 42)"/>
+        <ellipse cx="42" cy="42" rx="12" ry="5" fill="none" stroke="#cc2222" stroke-width="1.2" transform="rotate(-60 42 42)"/>
+        <circle cx="42" cy="42" r="2.5" fill="#cc2222"/>
+        <!-- Text ĐẠI HỌC -->
+        <text x="85" y="34" text-anchor="middle" font-size="9" font-weight="700" fill="#cc2222" font-family="'Be Vietnam Pro',sans-serif" letter-spacing="1">ĐẠI HỌC</text>
+        <!-- SP big -->
+        <text x="85" y="62" text-anchor="middle" font-size="28" font-weight="900" fill="#cc2222" font-family="'Be Vietnam Pro',sans-serif">SP</text>
+        <!-- TP. HCM small -->
+        <text x="85" y="76" text-anchor="middle" font-size="7.5" fill="#1a3f6f" font-family="'Be Vietnam Pro',sans-serif" letter-spacing="0.5">TP. HỒ CHÍ MINH</text>
+        <!-- Right arrow/chevron shape -->
+        <polygon points="126,8 210,8 210,90 126,90 156,49" fill="#1a3f6f"/>
+        <polygon points="134,16 202,16 202,82 134,82 162,49" fill="#2a5fa0"/>
+      </svg>
+    </div>
+
+    <div class="school-name">Trường Đại học Sư phạm<br>Thành phố Hồ Chí Minh</div>
+    <div class="subtitle">Hệ thống đăng nhập với xác thực CCCD</div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="form-group">
+      <input type="text" id="cccd" placeholder="Nhập số CCCD" maxlength="12" inputmode="numeric" autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <input type="password" id="password" placeholder="Mật khẩu" autocomplete="current-password" />
+      <button class="eye-btn" id="eyeBtn" onclick="togglePwd()" aria-label="Hiện/ẩn mật khẩu" type="button">
+        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+          <line id="eyeSlash" x1="3" y1="3" x2="21" y2="21" stroke-width="1.8" style="display:none"/>
+        </svg>
+      </button>
+    </div>
+
+    <button class="btn-login" onclick="doLogin()" type="button">Đăng nhập</button>
+
+    <div class="footer-links">
+      Chưa có tài khoản? <a href="#">Đăng ký ngay</a><br>
+      Quên mật khẩu? <a href="#">Khôi phục tại đây</a>
+    </div>
+  </div>
+
+  <div class="copyright">© 2026 Ho Chi Minh City University of Education</div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var pwdVisible = false;
+
+    function togglePwd() {
+      pwdVisible = !pwdVisible;
+      var inp = document.getElementById('password');
+      var slash = document.getElementById('eyeSlash');
+      inp.type = pwdVisible ? 'text' : 'password';
+      slash.style.display = pwdVisible ? 'block' : 'none';
+    }
+
+    function showError(msg) {
+      var el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function hideError() {
+      document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 3000);
+    }
+
+    function doLogin() {
+      hideError();
+      var cccd = document.getElementById('cccd').value.trim();
+      var pwd  = document.getElementById('password').value;
+
+      if (!cccd) { showError('Vui lòng nhập số CCCD.'); return; }
+      if (!/^\d{12}$/.test(cccd)) { showError('Số CCCD phải gồm đúng 12 chữ số.'); return; }
+      if (!pwd) { showError('Vui lòng nhập mật khẩu.'); return; }
+
+      showToast('Đang xác thực, vui lòng chờ...');
+    }
+
+    document.getElementById('cccd').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') document.getElementById('password').focus();
+    });
+    document.getElementById('password').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doLogin();
+    });
+  </script>
+
+</body>
+</html>
