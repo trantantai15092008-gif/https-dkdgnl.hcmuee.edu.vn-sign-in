@@ -1,1 +1,1 @@
-# https-dkdgnl.hcmuee.edu.vn-sign-in
+# https://dkdgnl.hcmuee.edu.vn/sign-in
